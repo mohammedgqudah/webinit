@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+
+import os
+
+template = """import sys
+import requests
+
+try:
+    url = sys.argv[1]
+except:
+    print("Usage: uv run solve.py <URL> ",file=sys.stderr)
+    exit(1)
+
+s = requests.Session()
+
+def login(username, password):
+    r = s.post(f"{url}/endpoint", headers={
+        'Content-Type': 'application/json'
+    }, data={
+        'username': username,
+        'password': password,
+    })
+    assert r.status_code == 200
+    return r
+
+def form_data(username, password):
+    r = s.post(f"{url}/endpoint", headers={
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }, data={
+        'username': username,
+        'password': password,
+    })
+    assert r.status_code == 200
+    return r
+
+def multipart(username, password):
+    r = s.post(f"{url}/endpoint", data={
+        'username': username,
+        'password': password,
+    }, files={
+        'file': ('filename.txt', b"file_content")
+    })
+    assert r.status_code == 200
+    return r
+"""
+
+# Filepath for `solve.py`
+file_path = "solve.py"
+
+os.system("uv init .")
+os.system("rm hello.py")
+os.system("uv add requests")
+
+# Check if the file exists; if not, create it
+if not os.path.exists(file_path):
+    with open(file_path, "w") as file:
+        file.write(template)
+    print(f"{file_path} created successfully.")
+else:
+    print(f"{file_path} already exists.")
+

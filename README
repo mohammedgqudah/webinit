@@ -1,0 +1,12 @@
+Webinit
+=======
+
+Generate a `solve.py` for CTF web challenges.
+
+Build
+=====
+
+Install webinit in /usr/local/bin
+
+``make install``
+
